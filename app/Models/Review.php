@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Review extends Model
 {
     use HasFactory;
+
+    // belongsToメソッドを使用してリレーションシップを定義
+    // ReviewモデルがUserモデル(User.phpでextendしているやつ)に属していることを示している
+    // この関係は、「1つのレビューは1つのユーザーに属する」というもので、外部キーを使用してデータベースの
+    //  reviews テーブルと users テーブルを関連付ける
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    // 以下のようにしてほしいレビューのuserを取得することができようになる
+    // $review = Review::find(1);
+// $user = $review->user; // あるレビューの作者（ユーザー）にアクセス
 }
