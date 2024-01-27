@@ -10,10 +10,19 @@ class ReviewController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($media_type,$media_id) //ここの引数は、api.phpで指定しているurlから受けとる。＄マーク忘れずに
     {
         // reviewsテーブルにある値を全て取得するメソッド
-        $reviews = Review::all();
+        // $reviews = Review::all();
+
+// 　　　　　// reviewsテーブルから引数の作品情報の、特定ユーザーのレビューを取得するメソッド
+            // :withはリレーションを設定しているテーブルでしか設定できないので注意
+            // リレーションはmigrationファイルのcascadeOnDelete()にて、user_idをkeyとして設定済み
+        $reviews = Review::with('users')  //下記絞り込み内容のうち、user_idカラムを抽出する
+        ->where('media_type', $media_type) // 引数のmedia_typeにより、テーブルのmedia_typeカラムを検索する
+        ->where('media_id', $media_id) // 引数のmedia_idにより、テーブルのmedia_idカラムを��索する
+        ->get(); // 取得したレビューを返す
+
         return response() -> json($reviews);
 
     }
