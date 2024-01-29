@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
@@ -40,7 +41,28 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //フロント側から受け取った値にバリデーションをかける。migrationファイルの型に合わせるように設定すること
+        $validateDate = $request->validate([
+            "content" => "required|string",
+            "rating" => "required|integer",
+            "media_type" => "required|string",
+            "media_id" => "required|integer",
+        ]);
+
+        // createメソッドを利用する場合はモデルで指定しなければならない点に注意
+        $review =Review::create([
+            "content" => $validateDate["content"],
+            "rating" =>$validateDate["rating"],
+            "media_type" =>$validateDate["media_type"],
+            "media_id" =>$validateDate["media_id"],
+            // user_idはフロントで送信できないため、Authから取得する
+            "user_id" => Auth::id()
+        ]);
+
+        //ユーザーIDに紐づくユーザー情報を取得する
+        $review->load('user');
+
+        return response()->json($review);
     }
 
     /**
