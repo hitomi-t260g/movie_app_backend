@@ -92,8 +92,12 @@ class ReviewController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Review $review)
+    public function destroy(Review $id)
     {
-        //
+        // 取得したidのレビューを削除する
+        // route model binding(引数に指定しているReviews)を利用し、取得したidに対してメソッドが呼ばれる
+        $id->delete();
+
+        return response()->json(['message' => '正常にレビューを削除しました']);
     }
 }
