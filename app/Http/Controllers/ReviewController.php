@@ -84,9 +84,21 @@ class ReviewController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Review $review)
+    public function update(Request $request, Review $id)
     {
-        //
+        //フロント側から受け取った値にバリデーションをかける。migrationファイルの型に合わせるように設定すること
+        $validateDate = $request->validate([
+            "content" => "required|string",
+            "rating" => "required|integer",
+        ]);
+
+        //取得したidに該当するレビューを取得し、レビューを更新する
+        $id->update([
+            "content" => $validateDate["content"],
+            "rating" =>$validateDate["rating"],
+        ]);
+
+        return response()->json($id);
     }
 
     /**

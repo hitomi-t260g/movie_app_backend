@@ -24,3 +24,5 @@ Route::get('/reviews/{media_type}/{media_id}',[ReviewController::class,'index'])
 Route::post('/reviews',[ReviewController::class,'store']);
 
 Route::delete('/review/{id}', [ReviewController::class, 'destroy']);
+
+Route::put('/review/{id}',[ReviewController::class,'update']);
