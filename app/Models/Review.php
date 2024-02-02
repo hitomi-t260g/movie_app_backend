@@ -9,6 +9,15 @@ class Review extends Model
 {
     use HasFactory;
 
+    // createメソッドを利用するため、指定カラムの入力を許可する。fillableは固定の予約後なので変更しないように。
+    protected $fillable = [
+        "content",
+        "rating",
+        "media_id",
+        "media_type",
+        "user_id"
+    ];
+
     // belongsToメソッドを使用してリレーションシップを定義
     // ReviewモデルがUserモデル(User.phpでextendしているやつ)に属していることを示している
     // この関係は、「1つのレビューは1つのユーザーに属する」というもので、外部キーを使用してデータベースの
