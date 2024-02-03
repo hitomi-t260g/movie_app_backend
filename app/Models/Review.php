@@ -29,4 +29,13 @@ class Review extends Model
     // 以下のようにしてほしいレビューのuserを取得することができようになる
     // $review = Review::find(1);
 // $user = $review->user; // あるレビューの作者（ユーザー）にアクセス
+
+// hasManyメソッドを使用してリレーションシップを定義
+    // ReviewモデルがCommentに対して複数投稿できることを示している
+    // この関係は、「1つのユーザーは複数のレビューに属する」というもので、外部キーを使用してデータベースの
+    //  comments テーブルと reviews テーブルを関連付ける
+    public function comments ()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
