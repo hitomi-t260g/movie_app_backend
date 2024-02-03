@@ -68,9 +68,15 @@ class ReviewController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Review $review)
+    public function show(Review $review_id)
     {
-        //
+        //1. 詳細ページを表示しているレビューをまず取得する -> ルートmodelバインディングを利用しているため $review_idのみで取得できる
+        //2. getしているユーザーidを取得する
+        //3. 取得したレビューに紐づいたコメントテーブルのコメントを取得する
+        //4. それぞれのコメントをした人のユーザー情報を取得する
+        $review_id -> load('user', 'comments.user');
+
+        return response()->json($review_id);
     }
 
     /**
