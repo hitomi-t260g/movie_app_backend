@@ -42,7 +42,7 @@ class ReviewController extends Controller
     public function store(Request $request)
     {
         //フロント側から受け取った値にバリデーションをかける。migrationファイルの型に合わせるように設定すること
-        $validateDate = $request->validate([
+        $validateData = $request->validate([
             "content" => "required|string",
             "rating" => "required|integer",
             "media_type" => "required|string",
@@ -51,10 +51,10 @@ class ReviewController extends Controller
 
         // createメソッドを利用する場合はモデルで指定しなければならない点に注意
         $review =Review::create([
-            "content" => $validateDate["content"],
-            "rating" =>$validateDate["rating"],
-            "media_type" =>$validateDate["media_type"],
-            "media_id" =>$validateDate["media_id"],
+            "content" => $validateData["content"],
+            "rating" =>$validateData["rating"],
+            "media_type" =>$validateData["media_type"],
+            "media_id" =>$validateData["media_id"],
             // user_idはフロントで送信できないため、Authから取得する
             "user_id" => Auth::id()
         ]);
