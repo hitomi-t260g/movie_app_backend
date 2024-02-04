@@ -33,3 +33,5 @@ Route::get('/review/{review_id}',[ReviewController::class,'show']);
 
 // コメント機能
 Route::post('/comments',[CommentController::class,'store']);
+
+Route::delete('/comment/{id}',[CommentController::class,'destroy']);

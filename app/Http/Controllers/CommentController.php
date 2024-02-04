@@ -79,8 +79,11 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Comment $comment)
+    public function destroy(Comment $id)
     {
-        //
+         // 取得したidのコメントを削除する
+        // route model binding(引数に指定しているComment)を利用し、取得したidに対してメソッドが呼ばれる
+        $id -> delete();
+        return response()->json(['message' => '正常にコメントを削除しました']);
     }
 }
