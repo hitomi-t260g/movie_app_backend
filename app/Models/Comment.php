@@ -12,8 +12,8 @@ class Comment extends Model
     // createメソッドを利用するため、指定カラムの入力を許可する。fillableは固定の予約後なので変更しないように。
     protected $fillable = [
         "content",
+        "review_id",
         "user_id",
-        "review_id"
     ];
 
     // belongsToメソッドを使用してリレーションシップを定義
