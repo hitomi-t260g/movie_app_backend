@@ -42,7 +42,7 @@ class ReviewController extends Controller
     public function store(Request $request)
     {
         //フロント側から受け取った値にバリデーションをかける。migrationファイルの型に合わせるように設定すること
-        $validateDate = $request->validate([
+        $validateData = $request->validate([
             "content" => "required|string",
             "rating" => "required|integer",
             "media_type" => "required|string",
@@ -51,10 +51,10 @@ class ReviewController extends Controller
 
         // createメソッドを利用する場合はモデルで指定しなければならない点に注意
         $review =Review::create([
-            "content" => $validateDate["content"],
-            "rating" =>$validateDate["rating"],
-            "media_type" =>$validateDate["media_type"],
-            "media_id" =>$validateDate["media_id"],
+            "content" => $validateData["content"],
+            "rating" =>$validateData["rating"],
+            "media_type" =>$validateData["media_type"],
+            "media_id" =>$validateData["media_id"],
             // user_idはフロントで送信できないため、Authから取得する
             "user_id" => Auth::id()
         ]);
@@ -68,9 +68,15 @@ class ReviewController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Review $review)
+    public function show(Review $review_id)
     {
-        //
+        //1. 詳細ページを表示しているレビューをまず取得する -> ルートmodelバインディングを利用しているため $review_idのみで取得できる
+        //2. getしているユーザーidを取得する
+        //3. 取得したレビューに紐づいたコメントテーブルのコメントを取得する
+        //4. それぞれのコメントをした人のユーザー情報を取得する
+        $review_id -> load('user', 'comments.user');
+
+        return response()->json($review_id);
     }
 
     /**
@@ -87,15 +93,15 @@ class ReviewController extends Controller
     public function update(Request $request, Review $id)
     {
         //フロント側から受け取った値にバリデーションをかける。migrationファイルの型に合わせるように設定すること
-        $validateDate = $request->validate([
+        $validateData = $request->validate([
             "content" => "required|string",
             "rating" => "required|integer",
         ]);
 
         //取得したidに該当するレビューを取得し、レビューを更新する
         $id->update([
-            "content" => $validateDate["content"],
-            "rating" =>$validateDate["rating"],
+            "content" => $validateData["content"],
+            "rating" =>$validateData["rating"],
         ]);
 
         return response()->json($id);
