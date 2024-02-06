@@ -32,6 +32,9 @@ Route::put('/review/{id}',[ReviewController::class,'update']);
 Route::get('/review/{review_id}',[ReviewController::class,'show']);
 
 // コメント機能
+// putがdeleteよりも後ろだとなぜか405エラーとなったため、位置移動
+Route::put('/comment/{id}',[CommentController::class,'update']);
 Route::post('/comments',[CommentController::class,'store']);
-
 Route::delete('/comment/{id}',[CommentController::class,'destroy']);
+
+

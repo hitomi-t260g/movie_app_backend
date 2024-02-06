@@ -93,15 +93,15 @@ class ReviewController extends Controller
     public function update(Request $request, Review $id)
     {
         //フロント側から受け取った値にバリデーションをかける。migrationファイルの型に合わせるように設定すること
-        $validateDate = $request->validate([
+        $validateData = $request->validate([
             "content" => "required|string",
             "rating" => "required|integer",
         ]);
 
         //取得したidに該当するレビューを取得し、レビューを更新する
         $id->update([
-            "content" => $validateDate["content"],
-            "rating" =>$validateDate["rating"],
+            "content" => $validateData["content"],
+            "rating" =>$validateData["rating"],
         ]);
 
         return response()->json($id);

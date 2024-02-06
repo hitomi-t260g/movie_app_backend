@@ -71,9 +71,25 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Comment $comment)
+    public function update(Request $request, Comment $id)
     {
-        //
+        // commentsテーブルのuser_idとログイン中のidが同じであることを確認する
+        if(Auth::id() !== $id->user_id){
+            return response()->json(['message' => '権限がありません'],401);
+        }
+
+         ///フロント側から受け取った値にバリデーションをかける。migrationファイルの型に合わせるように設定すること
+         $validateData = $request->validate([
+            // 文字数制限も始めの段階で確認しておく
+            "content" => "required|string|max:200",
+        ]);
+
+        //取得したidに該当するコメントを取得し、コメントを更新する
+        $id ->update([
+            "content" => $validateData["content"],
+        ]);
+
+        return response()->json($id);
     }
 
     /**
