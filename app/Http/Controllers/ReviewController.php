@@ -21,7 +21,7 @@ class ReviewController extends Controller
             // リレーションはmigrationファイルのcascadeOnDelete()にて、user_idをkeyとして設定済み
         $reviews = Review::with('user')  //下記絞り込み内容のうち、user_idカラムを抽出する
         ->where('media_type', $media_type) // 引数のmedia_typeにより、テーブルのmedia_typeカラムを検索する
-        ->where('media_id', $media_id) // 引数のmedia_idにより、テーブルのmedia_idカラムを��索する
+        ->where('media_id', $media_id) // 引数のmedia_idにより、テーブルのmedia_idカラムを検索する
         ->get(); // 取得したレビューを返す
 
         return response() -> json($reviews);
