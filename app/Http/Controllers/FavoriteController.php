@@ -8,6 +8,33 @@ use Illuminate\Support\Facades\Auth;
 
 class FavoriteController extends Controller
 {
+     /**
+     * お気に入りの登録状況を参照する
+     */
+    public function index($media_type,$media_id) //ここの引数は、api.phpで指定しているurlから受けとる。＄マーク忘れずに
+    {
+         //フロント側から受け取った値にバリデーションをかける。migrationファイルの型に合わせるように設定すること
+        //  $validateMediaType = $media_type->validate([
+        //     "media_type" => "required|string",
+        // ]);
+        // $validateMediaId = $media_id->validate([
+        //     "media_id" => "required|integer",
+        // ]);
+
+        // お気に入りに登録されているかを確認する
+        $existingFavorite = Favorite::where('user_id', Auth::id()) //Authから取得したuser_idを検索
+        ->where('media_type', $media_type) // 引数のmedia_typeにより、テーブルのmedia_typeカラムを検索する
+        ->where('media_id', $media_id) // 引数のmedia_idにより、テーブルのmedia_idカラムを検索する
+        ->first(); //  1つのレコードのみを取得する場合はfirstとする。お気に入りがあればテーブル内容が返却される
+
+        // お気に入りが既に存在している場合
+        if ($existingFavorite){
+            return response()->json(['isFavoriteExist' => 'true']);
+        }else{
+            // お気に入りが存在していない場合
+            return response()->noContent();
+        }
+    }
     /**
      * お気に入りのboolean値を変更する
      */
