@@ -40,4 +40,4 @@ Route::delete('/comment/{id}',[CommentController::class,'destroy']);
 
 // お気に入り
 Route::post('/favorite',[FavoriteController::class,'toggleFavorite']);
-Route::get('/favorite/{media_type}/{media_id}',[FavoriteController::class,'index']);
+Route::get('/favorites/status',[FavoriteController::class,'checkFavoriteStatus']);
