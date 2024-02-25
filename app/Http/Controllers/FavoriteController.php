@@ -5,11 +5,40 @@ namespace App\Http\Controllers;
 use App\Models\Favorite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class FavoriteController extends Controller
 {
      /**
-     * お気に入りの登録状況を参照する
+     * ユーザーごとのお気に入りに入っているメディアを取得する
+     */
+    public function index()
+    {
+        // TMDBのAPIを呼び出す
+        $api_key = config('services.tmdb.api_key'); // configディレクトリで設定が必要
+
+        // ユーザーのお気に入り登録情報を取得する
+        $user = Auth::user();
+        $favoriteList = $user->favorites; //Userモデルにfavoritesの追加が必要
+
+        // 配列の各お気に入りについてTMDBのメディア情報を呼び出す
+        $details = [];
+        foreach ($favoriteList as $favorite){
+            $tmdb_api_key =  "https://api.themoviedb.org/3/" . $favorite -> media_type . "/" . $favorite -> media_id . "?api_key=" . $api_key;
+            $response = Http::get($tmdb_api_key);
+            // apiコール失敗時はマージ処理は不要なため、if分岐させる
+            if($response -> successful()){
+                // TMDBのAPIレスポンスだけではmedia_typeがないため、media_typeを追加してからdetailsに格納する
+                $details[] = array_merge($response->json(),['media_type' => $favorite -> media_type]);
+            }
+        }
+
+        // お気に入り一覧を返す
+            return response()->json($details);
+
+    }
+     /**
+     * 特定条件におけるお気に入りの登録状況を参照する
      */
     public function checkFavoriteStatus(Request $request)
     {
