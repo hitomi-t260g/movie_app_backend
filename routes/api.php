@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ReviewController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -37,4 +38,7 @@ Route::put('/comment/{id}',[CommentController::class,'update']);
 Route::post('/comments',[CommentController::class,'store']);
 Route::delete('/comment/{id}',[CommentController::class,'destroy']);
 
-
+// お気に入り
+Route::get('/favorites',[FavoriteController::class,'index']);// indexなので一番上にもってくる
+Route::post('/favorite',[FavoriteController::class,'toggleFavorite']);
+Route::get('/favorites/status',[FavoriteController::class,'checkFavoriteStatus']);
